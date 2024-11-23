@@ -1,4 +1,5 @@
 from pathlib import Path
+from pprint import pprint
 
 from src.cdm import parse_cdm
 
@@ -90,9 +91,9 @@ def genetic_algorithm(cdm1, cdm2):
 
 def main() -> None:
     cdm1 = parse_cdm(Path("data/CSPOC_9.xml"))
-    print(cdm1)
+    pprint(cdm1)
     cdm2 = parse_cdm(Path("data/CAESAR_TRJ_12.xml"))
-    print(cdm2)
+    pprint(cdm2)
 
     print(genetic_algorithm(cdm1, cdm2))
 

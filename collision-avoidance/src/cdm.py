@@ -95,15 +95,15 @@ class RelativeMetadataData:
     miss_distance: float
     relative_speed: float
     relative_state_vector: RelativeStateVector
-    # start_screen_period: str
-    # stop_screen_period: str
-    # screen_volume_frame: str
-    # screen_volume_shape: str
-    # screen_volume_x: float
-    # screen_volume_y: float
-    # screen_volume_z: float
-    # screen_entry_time: str
-    # screen_exit_time: str
+    start_screen_period: str
+    stop_screen_period: str
+    screen_volume_frame: str
+    screen_volume_shape: str
+    screen_volume_x: float
+    screen_volume_y: float
+    screen_volume_z: float
+    screen_entry_time: str
+    screen_exit_time: str
 
 
 @dataclass
@@ -134,7 +134,29 @@ def parse_relative_state_vector(element: ET.Element) -> RelativeStateVector:
 
 
 def parse_covariance_matrix(element: ET.Element) -> CovarianceMatrix:
-    return CovarianceMatrix(**{tag.tag.lower(): float(tag.text) for tag in element})
+    return CovarianceMatrix(
+        cr_r=float(element.find("CR_R").text),
+        ct_r=float(element.find("CT_R").text),
+        ct_t=float(element.find("CT_T").text),
+        cn_r=float(element.find("CN_R").text),
+        cn_t=float(element.find("CN_T").text),
+        cn_n=float(element.find("CN_N").text),
+        crdot_r=float(element.find("CRDOT_R").text),
+        crdot_t=float(element.find("CRDOT_T").text),
+        crdot_n=float(element.find("CRDOT_N").text),
+        crdot_rdot=float(element.find("CRDOT_RDOT").text),
+        ctdot_r=float(element.find("CTDOT_R").text),
+        ctdot_t=float(element.find("CTDOT_T").text),
+        ctdot_n=float(element.find("CTDOT_N").text),
+        ctdot_rdot=float(element.find("CTDOT_RDOT").text),
+        ctdot_tdot=float(element.find("CTDOT_TDOT").text),
+        cndot_r=float(element.find("CNDOT_R").text),
+        cndot_t=float(element.find("CNDOT_T").text),
+        cndot_n=float(element.find("CNDOT_N").text),
+        cndot_rdot=float(element.find("CNDOT_RDOT").text),
+        cndot_tdot=float(element.find("CNDOT_TDOT").text),
+        cndot_ndot=float(element.find("CNDOT_NDOT").text),
+    )
 
 
 def parse_state_vector(element: ET.Element) -> StateVector:
@@ -149,20 +171,42 @@ def parse_state_vector(element: ET.Element) -> StateVector:
 
 
 def parse_metadata(element: ET.Element) -> Metadata:
-    return Metadata(**{child.tag.lower(): child.text for child in element})
+    return Metadata(
+        object=element.findtext("OBJECT", default=""),
+        object_designator=element.findtext("OBJECT_DESIGNATOR", default=""),
+        catalog_name=element.findtext("CATALOG_NAME", default=""),
+        object_name=element.findtext("OBJECT_NAME", default=""),
+        international_designator=element.findtext("INTERNATIONAL_DESIGNATOR", default=""),
+        object_type=element.findtext("OBJECT_TYPE", default=""),
+        ephemeris_name=element.findtext("EPHEMERIS_NAME", default=""),
+        covariance_method=element.findtext("COVARIANCE_METHOD", default=""),
+        maneuverable=element.findtext("MANEUVERABLE", default=""),
+        ref_frame=element.findtext("REF_FRAME", default=""),
+        gravity_model=element.findtext("GRAVITY_MODEL"),
+        atmospheric_model=element.findtext("ATMOSPHERIC_MODEL"),
+        n_body_perturbations=element.findtext("N_BODY_PERTURBATIONS"),
+        solar_rad_pressure=element.findtext("SOLAR_RAD_PRESSURE"),
+        earth_tides=element.findtext("EARTH_TIDES"),
+    )
 
 
 def parse_additional_parameters(element: ET.Element) -> AdditionalParameters:
     return AdditionalParameters(
-        **{child.tag.lower(): float(child.text) if child.text.isdigit() else child.text for child in element})
+        comment=element.find("COMMENT").text,
+        area_pc=float(element.find("AREA_PC").text),
+        cr_area_over_mass=float(element.find("CR_AREA_OVER_MASS").text)
+        if element.find("CR_AREA_OVER_MASS") is not None else None,
+    )
 
 
 def parse_segment_data(element: ET.Element) -> SegmentData:
-    state_vector = element.find("STATE_VECTOR")
-    covariance_matrix = element.find("COVARIANCE_MATRIX")
-    additional_parameters = element.find("ADDITIONAL_PARAMETERS")
+    od_parameters = element.find("odParameters")
+    state_vector = element.find("stateVector")
+    covariance_matrix = element.find("covarianceMatrix")
+    additional_parameters = element.find("additionalParameters")
 
     return SegmentData(
+        od_parameters=od_parameters,
         state_vector=parse_state_vector(state_vector) if state_vector is not None else None,
         covariance_matrix=parse_covariance_matrix(covariance_matrix) if covariance_matrix is not None else None,
         additional_parameters=parse_additional_parameters(
@@ -171,8 +215,8 @@ def parse_segment_data(element: ET.Element) -> SegmentData:
 
 
 def parse_segment(element: ET.Element) -> Segment:
-    metadata = parse_metadata(element.find("METADATA"))
-    data = parse_segment_data(element.find("DATA"))
+    metadata = parse_metadata(element.find("metadata"))
+    data = parse_segment_data(element.find("data"))
     return Segment(metadata=metadata, data=data)
 
 
@@ -183,15 +227,15 @@ def parse_relative_metadata_data(element: ET.Element) -> RelativeMetadataData:
         miss_distance=float(element.find("MISS_DISTANCE").text),
         relative_speed=float(element.find("RELATIVE_SPEED").text),
         relative_state_vector=relative_state_vector,
-        # start_screen_period=element.find("START_SCREEN_PERIOD").text,
-        # stop_screen_period=element.find("STOP_SCREEN_PERIOD").text,
-        # screen_volume_frame=element.find("SCREEN_VOLUME_FRAME").text,
-        # screen_volume_shape=element.find("SCREEN_VOLUME_SHAPE").text,
-        # screen_volume_x=float(element.find("SCREEN_VOLUME_X").text),
-        # screen_volume_y=float(element.find("SCREEN_VOLUME_Y").text),
-        # screen_volume_z=float(element.find("SCREEN_VOLUME_Z").text),
-        # screen_entry_time=element.find("SCREEN_ENTRY_TIME").text,
-        # screen_exit_time=element.find("SCREEN_EXIT_TIME").text,
+        start_screen_period=element.findtext("START_SCREEN_PERIOD", default=""),
+        stop_screen_period=element.findtext("STOP_SCREEN_PERIOD", default=""),
+        screen_volume_frame=element.findtext("SCREEN_VOLUME_FRAME", default=""),
+        screen_volume_shape=element.findtext("SCREEN_VOLUME_SHAPE", default=""),
+        screen_volume_x=float(element.find("SCREEN_VOLUME_X").text),
+        screen_volume_y=float(element.find("SCREEN_VOLUME_Y").text),
+        screen_volume_z=float(element.find("SCREEN_VOLUME_Z").text),
+        screen_entry_time=element.findtext("SCREEN_ENTRY_TIME", default=""),
+        screen_exit_time=element.findtext("SCREEN_EXIT_TIME", default=""),
     )
 
 
@@ -211,8 +255,9 @@ def parse_cdm(xml_file: Path) -> CDM:
 
     header = parse_header(tree.find("header"))
     body = tree.find("body")
+
     relative_metadata_data = parse_relative_metadata_data(body.find("relativeMetadataData"))
-    segments = [parse_segment(seg) for seg in tree.findall("SEGMENT")]
+    segments = [parse_segment(seg) for seg in body.findall("segment")]
 
     return CDM(
         header=header,

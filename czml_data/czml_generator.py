@@ -81,13 +81,12 @@ for i in range(NUM_DEBRIS):
             "verticalOrigin": "BOTTOM",
             "pixelOffset": {"cartesian2": [0, -20]},  # Offset label below object
         },
-        "billboard": {
-            "image": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Red_dot.svg",  # Icon URL
-            "scale": 0.5,
-            "show": True,
-            "horizontalOrigin": "CENTER",
-            "verticalOrigin": "CENTER",
-            "pixelOffset": {"cartesian2": [0, 0]},  # Centered on the object
+        "model": {
+            "gltf": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/AnimatedCube/glTF/AnimatedCube.gltf",
+            "scale": 0.5,  # Adjust to make the object smaller
+            "minimumPixelSize": 32,
+            "maximumScale": 200,
+            "show": True
         },
     }
     czml.append(debris_packet)

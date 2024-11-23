@@ -4,7 +4,7 @@ from src.cdm import parse_cdm
 
 
 def main() -> None:
-    cdm = parse_cdm(Path("data/CAESAR_TRJ_12.xml"))
+    cdm = parse_cdm(Path("data/CSPOC_9.xml"))
     print(cdm)
 
 

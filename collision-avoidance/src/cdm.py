@@ -95,15 +95,15 @@ class RelativeMetadataData:
     miss_distance: float
     relative_speed: float
     relative_state_vector: RelativeStateVector
-    start_screen_period: str
-    stop_screen_period: str
-    screen_volume_frame: str
-    screen_volume_shape: str
-    screen_volume_x: float
-    screen_volume_y: float
-    screen_volume_z: float
-    screen_entry_time: str
-    screen_exit_time: str
+    # start_screen_period: str
+    # stop_screen_period: str
+    # screen_volume_frame: str
+    # screen_volume_shape: str
+    # screen_volume_x: float
+    # screen_volume_y: float
+    # screen_volume_z: float
+    # screen_entry_time: str
+    # screen_exit_time: str
 
 
 @dataclass
@@ -177,21 +177,21 @@ def parse_segment(element: ET.Element) -> Segment:
 
 
 def parse_relative_metadata_data(element: ET.Element) -> RelativeMetadataData:
-    relative_state_vector = parse_relative_state_vector(element.find("RELATIVE_STATE_VECTOR"))
+    relative_state_vector = parse_relative_state_vector(element.find("relativeStateVector"))
     return RelativeMetadataData(
         tca=element.find("TCA").text,
         miss_distance=float(element.find("MISS_DISTANCE").text),
         relative_speed=float(element.find("RELATIVE_SPEED").text),
         relative_state_vector=relative_state_vector,
-        start_screen_period=element.find("START_SCREEN_PERIOD").text,
-        stop_screen_period=element.find("STOP_SCREEN_PERIOD").text,
-        screen_volume_frame=element.find("SCREEN_VOLUME_FRAME").text,
-        screen_volume_shape=element.find("SCREEN_VOLUME_SHAPE").text,
-        screen_volume_x=float(element.find("SCREEN_VOLUME_X").text),
-        screen_volume_y=float(element.find("SCREEN_VOLUME_Y").text),
-        screen_volume_z=float(element.find("SCREEN_VOLUME_Z").text),
-        screen_entry_time=element.find("SCREEN_ENTRY_TIME").text,
-        screen_exit_time=element.find("SCREEN_EXIT_TIME").text,
+        # start_screen_period=element.find("START_SCREEN_PERIOD").text,
+        # stop_screen_period=element.find("STOP_SCREEN_PERIOD").text,
+        # screen_volume_frame=element.find("SCREEN_VOLUME_FRAME").text,
+        # screen_volume_shape=element.find("SCREEN_VOLUME_SHAPE").text,
+        # screen_volume_x=float(element.find("SCREEN_VOLUME_X").text),
+        # screen_volume_y=float(element.find("SCREEN_VOLUME_Y").text),
+        # screen_volume_z=float(element.find("SCREEN_VOLUME_Z").text),
+        # screen_entry_time=element.find("SCREEN_ENTRY_TIME").text,
+        # screen_exit_time=element.find("SCREEN_EXIT_TIME").text,
     )
 
 
@@ -208,11 +208,11 @@ def parse_header(element: ET.Element) -> Header:
 
 def parse_cdm(xml_file: Path) -> CDM:
     tree = ET.parse(xml_file)
-    root = tree.getroot()
 
-    header = parse_header(root.find("header"))
-    relative_metadata_data = parse_relative_metadata_data(root.find("RELATIVE_METADATA_DATA"))
-    segments = [parse_segment(seg) for seg in root.findall("SEGMENT")]
+    header = parse_header(tree.find("header"))
+    body = tree.find("body")
+    relative_metadata_data = parse_relative_metadata_data(body.find("relativeMetadataData"))
+    segments = [parse_segment(seg) for seg in tree.findall("SEGMENT")]
 
     return CDM(
         header=header,

@@ -93,7 +93,7 @@ for i in range(NUM_DEBRIS):
     czml.append(debris_packet)
 
 # Write CZML to file
-output_file = "debris_simulation.czml"
+output_file = "czml_data/simple.czml"
 with open(output_file, "w") as f:
     json.dump(czml, f, indent=2)  # Serialize the document
 

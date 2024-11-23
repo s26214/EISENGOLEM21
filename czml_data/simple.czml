@@ -19,10 +19,9 @@
   },
 
   {
-    "id":"Satellite/Geoeye1",
-    "name":"Geoeye1",
+    "id":"debris0",
     "availability":"2012-03-15T10:00:00Z/2012-03-16T10:00:00Z",
-    "description":"<!--HTML-->\r\n<p>GeoEye-1 is a high-resolution earth observation satellite owned by GeoEye, which was launched in September 2008.</p>\r\n\r\n<p>On December 1, 2004, General Dynamics C4 Systems announced it had been awarded a contract worth approximately $209 million to build the OrbView-5 satellite. Its sensor is designed by the ITT Exelis.</p>\r\n\r\n<p>The satellite, now known as GeoEye-1, was originally scheduled for April 2008 but lost its 30-day launch slot to a U.S. government mission which had been delayed. It was rescheduled for launch August 22, 2008 from Vandenberg Air Force Base aboard a Delta II launch vehicle. The launch was postponed to September 4, 2008, due to unavailability of the Big Crow telemetry-relay aircraft. It was delayed again to September 6 because Hurricane Hanna interfered with its launch crews.</p>\r\n\r\n<p>The launch took place successfully on September 6, 2008 at 11:50:57 a.m. PDT (18:50:57 UTC). The GeoEye-1 satellite separated successfully from its Delta II launch vehicle at 12:49 p.m. PDT (19:49 UTC), 58 minutes and 56 seconds after launch.</p>",
+    "description":"",
     "billboard":{
       "eyeOffset":{
         "cartesian":[
@@ -30,7 +29,6 @@
         ]
       },
       "horizontalOrigin":"CENTER",
-      "image":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADJSURBVDhPnZHRDcMgEEMZjVEYpaNklIzSEfLfD4qNnXAJSFWfhO7w2Zc0Tf9QG2rXrEzSUeZLOGm47WoH95x3Hl3jEgilvDgsOQUTqsNl68ezEwn1vae6lceSEEYvvWNT/Rxc4CXQNGadho1NXoJ+9iaqc2xi2xbt23PJCDIB6TQjOC6Bho/sDy3fBQT8PrVhibU7yBFcEPaRxOoeTwbwByCOYf9VGp1BYI1BA+EeHhmfzKbBoJEQwn1yzUZtyspIQUha85MpkNIXB7GizqDEECsAAAAASUVORK5CYII=",
       "pixelOffset":{
         "cartesian2":[
           0,0
@@ -60,8 +58,7 @@
         ]
       },
       "show":true,
-      "style":"FILL_AND_OUTLINE",
-      "text":"Geoeye 1",
+      "text":"o",
       "verticalOrigin":"CENTER"
     },
     "path":{
@@ -81,7 +78,6 @@
           }
         }
       },
-      "resolution":120,
       "leadTime":[
         {
           "interval":"2012-03-15T10:00:00Z/2012-03-15T10:39:30.5752243210009Z",

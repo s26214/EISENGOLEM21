@@ -48,11 +48,67 @@ czml.append({
     "name": "Debris Simulation",
     "version": "1.0",
 })
+satellite_orbit = Orbit.from_classical(
+    Earth,
+    7000 * u.km,  # Semi-major axis
+    0.01 * u.one,  # Eccentricity
+    45 * u.deg,  # Inclination
+    0 * u.deg,  # RAAN
+    0 * u.deg,  
+    0 * u.deg,  
+)
+satellite_epoch, satellite_positions_with_time = propagate_orbit(
+    satellite_orbit, SIMULATION_TIME_SPAN, STEP_SIZE
+)
+
+# Convert satellite positions to CZML-compatible format
+satellite_cartesian_positions = []
+for pos in satellite_positions_with_time:
+    time_offset = (Time(pos["time"]) - Time(satellite_epoch)).sec /10
+    satellite_cartesian_positions.extend([time_offset] + pos["position"])
+
+# Create a satellite packet
+satellite_packet = {
+    "id": "Satellite-1",
+    "position": {
+        "interpolationAlgorithm": "LAGRANGE",
+        "interpolationDegree": 5,
+        "referenceFrame": "INERTIAL",
+        "epoch": satellite_epoch,
+        "cartesian": satellite_cartesian_positions,
+    },
+    "label": {
+            "text": f"Satelite",
+            "font": "12pt Helvetica",
+            "fillColor": {"rgba": [255, 255, 255, 255]},  # White text
+            "outlineColor": {"rgba": [0, 0, 0, 255]},  # Black outline
+            "outlineWidth": 2,
+            "show": True,
+            "horizontalOrigin": "CENTER",
+            "verticalOrigin": "BOTTOM",
+            "pixelOffset": {"cartesian2": [0, -20]},  # Offset label below object
+        },
+    "path": {
+        "show": True,
+        "leadTime": 0,
+        "trailTime": SIMULATION_TIME_SPAN,
+        "width": 2,
+        "material": {
+            "solidColor": {
+                "color": {"rgba": [255, 0, 0, 255]}  # Red line
+            }
+        }
+    }
+}
+czml.append(satellite_packet)
 
 # Generate debris packets
 for i in range(NUM_DEBRIS):
     orbit = generate_random_orbit()
-    epoch, positions_with_time = propagate_orbit(orbit, SIMULATION_TIME_SPAN, STEP_SIZE)
+
+    speed_factor = random.uniform(0.5, 2.0)  # Speeds between 0.5x and 2.0x normal speed
+
+    epoch, positions_with_time = propagate_orbit(orbit, SIMULATION_TIME_SPAN, STEP_SIZE/speed_factor)
     
     # Convert positions to CZML-compatible format
     cartesian_positions = []

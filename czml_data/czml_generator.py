@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import numpy as np
 from poliastro.bodies import Earth
@@ -140,8 +141,11 @@ for i in range(NUM_DEBRIS):
     }
     czml.append(debris_packet)
 
+# Ensure the directory exists
+output_file = "simple.czml"
+os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
 # Write CZML to file
-output_file = "czml_data/simple.czml"
 with open(output_file, "w") as f:
     json.dump(czml, f, indent=2)  # Serialize the document
 
